@@ -29,7 +29,7 @@ yarn detect-text 画像ファイル名
 
 ex.)
 ```
-yarn detect-text nkmr_kz.jpg
+yarn detect-text sampleImages/nkmr_kz.png
 ┌─────────┬────────┬──────────────┬───────────────────┐
 │ (index) │  Type  │ DetectedText │    Confidence     │
 ├─────────┼────────┼──────────────┼───────────────────┤

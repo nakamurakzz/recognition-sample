@@ -6,8 +6,8 @@
   "author": "nkmrkz <kazutaka.nakamura@ncdc.co.jp>",
   "license": "MIT",
   "scripts": {
-    "detect-labels": "./node_modules/.bin/ts-node detectLabels.ts",
-    "detect-text": "./node_modules/.bin/ts-node detectText.ts"
+    "detect-labels": "./node_modules/.bin/ts-node ./src/detectLabels.ts",
+    "detect-text": "./node_modules/.bin/ts-node ./src/detectText.ts"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.30.0",
