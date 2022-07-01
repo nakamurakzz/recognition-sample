@@ -1,11 +1,14 @@
-import { DetectLabelsCommand } from "@aws-sdk/client-rekognition";
+import {
+  DetectTextCommand,
+  DetectTextCommandInput,
+} from "@aws-sdk/client-rekognition";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
 import "dotenv/config";
 import { AWSClients } from "./lib/awsClients";
 
 const bucketName = process.env.BUCKET;
-const firstDirectory = "detect-label/";
+const firstDirectory = "detect-text/";
 
 const main = async (fileName: string) => {
   const aws = new AWSClients();
@@ -24,28 +27,27 @@ const main = async (fileName: string) => {
     return;
   }
 
-  const params = {
+  const params: DetectTextCommandInput = {
     Image: {
       S3Object: {
         Bucket: bucketName,
         Name: firstDirectory + fileName,
       },
     },
-    MaxLabels: 5,
-    MinConfidence: 70,
   };
 
   try {
     const data = await aws.rekognitionClient.send(
-      new DetectLabelsCommand(params)
+      new DetectTextCommand(params)
     );
 
     // ラベル表示
     console.table(
-      data.Labels?.map((label) => {
+      data.TextDetections?.map((text) => {
         return {
-          Name: label.Name,
-          Confidence: label.Confidence,
+          Type: text.Type,
+          DetectedText: text.DetectedText,
+          Confidence: text.Confidence,
         };
       })
     );
