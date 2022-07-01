@@ -64,3 +64,19 @@ yarn detect-face 画像ファイル名
 │    7    │   'ANGRY'   │ 0.19574607908725739 │
 └─────────┴─────────────┴─────────────────────┘
 ```
+
+## Search Face
+- 以下を実行
+```
+yarn search-face 照合したい画像ファイル名 [顔画像リスト]
+```
+
+ex.)
+```
+yarn search-face targetFace.png face1.png face2.png face3.png
+```
+
+```
+yarn search-face targetFace.png faces.png
+```
+
