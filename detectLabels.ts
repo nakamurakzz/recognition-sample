@@ -1,54 +1,56 @@
-import { RekognitionClient, DetectLabelsCommand } from "@aws-sdk/client-rekognition"
-import { S3Client,PutObjectCommand } from "@aws-sdk/client-s3";
+import { DetectLabelsCommand } from "@aws-sdk/client-rekognition";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
-import 'dotenv/config'
+import "dotenv/config";
+import { AWSClients } from "./lib/awsClients";
 
 const bucketName = process.env.BUCKET;
 const firstDirectory = "detect-label/";
 
-const main = async (fileName:string) => {
-  const commonParam = { region: "ap-northeast-1" }
-  const s3Client = new S3Client(commonParam);
+const main = async (fileName: string) => {
+  const aws = new AWSClients();
 
-  try{
+  try {
     const fileBuffer = fs.readFileSync(`./${fileName}`);
-    await s3Client.send(
+    await aws.s3Client.send(
       new PutObjectCommand({
         Bucket: bucketName,
         Key: firstDirectory + fileName,
         Body: fileBuffer,
       })
-    );  
-  }catch(err){
+    );
+  } catch (err) {
     console.error(err);
     return;
   }
 
-  const rekognitionClient = new RekognitionClient(commonParam);
   const params = {
     Image: {
-    S3Object: {
-      Bucket: bucketName, 
-      Name: firstDirectory + fileName
-    }
-    }, 
-    MaxLabels: 5, 
-    MinConfidence: 70
+      S3Object: {
+        Bucket: bucketName,
+        Name: firstDirectory + fileName,
+      },
+    },
+    MaxLabels: 5,
+    MinConfidence: 70,
   };
 
-  try{
-    const command = new DetectLabelsCommand(params);
-    const data = await rekognitionClient.send(command);  
-    
+  try {
+    const data = await aws.rekognitionClient.send(
+      new DetectLabelsCommand(params)
+    );
+
     // ラベル表示
-    console.log(data.Labels);
-  }catch(err){
-    console.error(err)
-    return
+    console.log(
+      data.Labels?.map((label) => `${label.Name} : ${label.Confidence}`)
+    );
+  } catch (err) {
+    console.error(err);
+    return;
   }
 
   return;
-}
+};
 
-if (process.argv[2]==undefined) throw new Error("Please specify a file name");
-main(process.argv[2])
+if (process.argv[2] == undefined) throw new Error("Please specify a file name");
+main(process.argv[2]);
