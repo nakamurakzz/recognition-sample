@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "detect-labels": "./node_modules/.bin/ts-node ./src/detectLabels.ts",
-    "detect-text": "./node_modules/.bin/ts-node ./src/detectText.ts"
+    "detect-text": "./node_modules/.bin/ts-node ./src/detectText.ts",
+    "detect-face": "./node_modules/.bin/ts-node ./src/detectFace.ts"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.30.0",
