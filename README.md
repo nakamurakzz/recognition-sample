@@ -11,7 +11,11 @@ yarn
 
 ## 実行方法
 ### 共通
-- バケット作成、.envに定義
+#### S3を使用する場合
+- バケット作成、.envにWSのprofile名、バケット名を定義
+
+#### 直接ファイルから読み込む場合
+- .envにAWSのprofile名を定義
 
 ### DetectLabels
 - detect-label フォルダをバケット直下に作成

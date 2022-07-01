@@ -1,8 +1,4 @@
-import {
-  DetectTextCommand,
-  DetectTextCommandInput,
-} from "@aws-sdk/client-rekognition";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { DetectTextCommand } from "@aws-sdk/client-rekognition";
 import fs from "fs";
 import "dotenv/config";
 import { AWSClients } from "./lib/awsClients";
@@ -14,29 +10,21 @@ const main = async (fileName: string) => {
   const aws = new AWSClients();
 
   try {
-    const fileBuffer = fs.readFileSync(`./${fileName}`);
-    await aws.s3Client.send(
-      new PutObjectCommand({
-        Bucket: bucketName,
-        Key: firstDirectory + fileName,
-        Body: fileBuffer,
-      })
-    );
-  } catch (err) {
-    console.error(err);
-    return;
-  }
+    // S3のファイルを使用する場合
+    // const params: DetectTextCommandInput = {
+    //   Image: {
+    //     S3Object: {
+    //       Bucket: bucketName,
+    //       Name: firstDirectory + fileName,
+    //     },
+    //   },
+    // };
 
-  const params: DetectTextCommandInput = {
-    Image: {
-      S3Object: {
-        Bucket: bucketName,
-        Name: firstDirectory + fileName,
+    const params = {
+      Image: {
+        Bytes: fs.readFileSync(`./${fileName}`),
       },
-    },
-  };
-
-  try {
+    };
     const data = await aws.rekognitionClient.send(
       new DetectTextCommand(params)
     );
